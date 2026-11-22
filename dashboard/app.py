@@ -310,22 +310,27 @@ with st.sidebar:
 # DATA PROCESSING
 # ---------------------------------------------------------
 
-def get_factory_data(scenario="Normal operation"):
-    analysis = []
-    for _, row in df.iterrows():
-        flags = analyze_readings(row.to_dict())
-        risk = calculate_risk(flags)
-        analysis.append({
-            **flags,
-            "risk_score": risk["score"],
-            "risk_level": risk["level"],
-            "risk_note": risk["label"]
-        })
-        results = df.join(pd.DataFrame(analysis))
-        high_count = int((results["risk_level"] == "HIGH").sum())
-        medium_count = int((results["risk_level"] == "MEDIUM").sum())
-        low_count = int((results["risk_level"] == "LOW").sum())
-        total = len(results)
+df = get_factory_data(scenario)
+
+analysis = []
+
+for _, row in df.iterrows():
+    flags = analyze_readings(row.to_dict())
+    risk = calculate_risk(flags)
+
+    analysis.append({
+        **flags,
+        "risk_score": risk["score"],
+        "risk_level": risk["level"],
+        "risk_note": risk["label"]
+    })
+
+results = df.join(pd.DataFrame(analysis))
+
+high_count = int((results["risk_level"] == "HIGH").sum())
+medium_count = int((results["risk_level"] == "MEDIUM").sum())
+low_count = int((results["risk_level"] == "LOW").sum())
+total = len(results)
 
 # ---------------------------------------------------------
 # TOP BAR AND HERO
