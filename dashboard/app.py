@@ -311,7 +311,7 @@ with st.sidebar:
 # ---------------------------------------------------------
 
 def get_factory_data(scenario="Normal operation"):
-analysis = []
+    analysis = []
 
 for _, row in df.iterrows():
     flags = analyze_readings(row.to_dict())
