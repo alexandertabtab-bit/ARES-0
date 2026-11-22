@@ -310,8 +310,7 @@ with st.sidebar:
 # DATA PROCESSING
 # ---------------------------------------------------------
 
-df = get_factory_data(scenario)
-
+def get_factory_data(scenario="Normal operation"):
 analysis = []
 
 for _, row in df.iterrows():
