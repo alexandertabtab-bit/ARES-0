@@ -305,7 +305,6 @@ with st.sidebar:
     st.caption("ARES Prototype · 2026")
     st.caption("Synthetic demonstration data")
 
-
 # ---------------------------------------------------------
 # DATA PROCESSING
 # ---------------------------------------------------------
