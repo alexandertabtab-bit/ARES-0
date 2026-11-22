@@ -252,6 +252,27 @@ div[data-testid="stButton"] > button {
     color: #EAFBFF;
     font-weight: 600;
 }
+/* Clickable ARES drone cards */
+[class*="st-key-unit_"] button {
+    width: 100%;
+    min-height: 155px;
+    height: auto;
+    text-align: left;
+    white-space: pre-wrap;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding: 18px;
+    border-radius: 13px;
+    background: #101B2A;
+    border: 1px solid #26384D;
+    color: #EDF4FC;
+    line-height: 1.6;
+}
+
+[class*="st-key-unit_"] button:hover {
+    background: #142236;
+    border-color: #27D8E8;
+}
 
 div[data-testid="stButton"] > button:hover {
     border-color: var(--cyan);
@@ -538,12 +559,103 @@ with map_col:
     )
 
 
-with status_col:
 
+with status_col:
     st.markdown(
         '<div class="ares-section">ARES unit network</div>',
         unsafe_allow_html=True
     )
+
+    unit_data = [
+        {
+            "code": "UNIT A",
+            "name": "Rapid response",
+            "desc": "Wildfire detection and aerial assessment",
+            "status": "CONCEPT / NOT CONNECTED",
+            "mission": "Rapid wildfire response and initial incident assessment.",
+            "deployment": "When a wildfire or suspected fire is detected.",
+            "capabilities": "Visual observation, thermal assessment and perimeter mapping."
+        },
+        {
+            "code": "UNIT B",
+            "name": "Advanced intervention",
+            "desc": "Difficult wildfires and severe incidents",
+            "status": "CONCEPT / NOT CONNECTED",
+            "mission": "Support intervention in difficult or severe incidents.",
+            "deployment": "When the command centre identifies a need for advanced intervention.",
+            "capabilities": "Advanced aerial intervention support and incident observation."
+        },
+        {
+            "code": "UNIT C",
+            "name": "Industrial intelligence",
+            "desc": "Continuous facility data collection",
+            "status": "SIMULATION ACTIVE",
+            "mission": "Collect and transmit facility-specific industrial hazard intelligence.",
+            "deployment": "Scheduled or continuous facility monitoring.",
+            "capabilities": "Chemical inventory information, storage locations, facility layout and environmental sensor readings."
+        },
+        {
+            "code": "UNIT D",
+            "name": "Catastrophe response",
+            "desc": "Large-scale emergency support",
+            "status": "PROTOTYPE",
+            "mission": "Support firefighters and emergency services during major incidents.",
+            "deployment": "When the command centre identifies a large-scale emergency.",
+            "capabilities": "Aerial incident overview and coordination support."
+        }
+    ]
+
+    if "selected_unit" not in st.session_state:
+        st.session_state.selected_unit = None
+
+    for unit in unit_data:
+        code_key = unit["code"].lower().replace(" ", "_")
+
+        card_label = (
+            f"{unit['code']}\n\n"
+            f"{unit['name']}\n"
+            f"{unit['desc']}\n\n"
+            f"● {unit['status']}"
+        )
+
+        if st.button(
+            card_label,
+            key=f"{code_key}_card",
+            use_container_width=True
+        ):
+            st.session_state.selected_unit = unit["code"]
+
+    selected = next(
+        (u for u in unit_data
+         if u["code"] == st.session_state.selected_unit),
+        None
+    )
+
+    if selected:
+        st.divider()
+        st.markdown(f"### {selected['code']} · {selected['name']}")
+        st.write("**Mission**")
+        st.write(selected["mission"])
+        st.write("**Deployment conditions**")
+        st.write(selected["deployment"])
+        st.write("**Capabilities**")
+        st.write(selected["capabilities"])
+        st.caption(f"Current status: {selected['status']}")
+
+        if selected["code"] == "UNIT C":
+            st.info(
+                "Unit C sends industrial intelligence to the ARES "
+                "Fire & Emergency Command Center. Human operators "
+                "evaluate the incident and decide which response units "
+                "to deploy."
+            )
+
+        if st.button("Close profile", key="close_unit_profile"):
+            st.session_state.selected_unit = None
+            st.rerun()
+
+    st.write("")
+
 
     # -----------------------------------------------------
     # DRONE DEFINITIONS
