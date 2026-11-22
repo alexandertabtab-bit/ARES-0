@@ -337,7 +337,18 @@ with tab_vision:
     conf = st.slider("Confidence threshold", 0.05, 0.95, 0.25, 0.05)
     up = st.file_uploader("Upload an image", type=["jpg", "jpeg", "png"])
     cam = st.camera_input("...or take a photo")
+    url = st.text_input("...or paste an image link (right click image > Copy image address)")
     source = up or cam
+    if source is None and url:
+        try:
+            import io
+            import requests
+
+            r = requests.get(url, timeout=15, headers={"User-Agent": "Mozilla/5.0"})
+            r.raise_for_status()
+            source = io.BytesIO(r.content)
+        except Exception as e:
+            st.error(f"Could not download the image: {e}")
 
     if source is None:
         st.info("Waiting for an image.")
