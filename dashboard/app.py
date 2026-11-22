@@ -370,7 +370,7 @@ with k2:
     st.markdown(f"""
     <div class="ares-card">
         <div class="ares-card-label">High indicators</div>
-        <div class="ares-card-value" style="color:#F05B62">{high_count:02d}</div>
+        <div class="ares-card-value">{high_count:02d}</div>
         <div class="ares-card-note">Require human review</div>
     </div>
     """, unsafe_allow_html=True)
