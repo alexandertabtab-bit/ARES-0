@@ -254,7 +254,8 @@ if sel_code:
 st.write("")
 
 # ------------------------------ MAIN TABS ------------------------------
-tab_map, tab_sensors, tab_alerts = st.tabs(["🗺  Facility map", "📡  Sensor intelligence", "🚨  Alerts"])
+tab_map, tab_sensors, tab_alerts, tab_vision = st.tabs(
+    ["🗺  Facility map", "📡  Sensor intelligence", "🚨  Alerts", "👁  Vision (YOLO)"])
 
 with tab_map:
     map_col, side_col = st.columns([1.7, 1])
@@ -327,6 +328,42 @@ with tab_alerts:
             st.error(f"🔴 HIGH INDICATOR · {row['machine_id']} — {row['machine']} | {msg}")
         else:
             st.warning(f"🟠 REVIEW REQUIRED · {row['machine_id']} — {row['machine']} | {msg}")
+
+with tab_vision:
+    from PIL import Image
+
+    st.markdown("**Visual detection (YOLO)** — upload a photo or use your camera.")
+    weights = st.text_input("Weights file inside the models/ folder", value="best.pt")
+    conf = st.slider("Confidence threshold", 0.05, 0.95, 0.25, 0.05)
+    up = st.file_uploader("Upload an image", type=["jpg", "jpeg", "png"])
+    cam = st.camera_input("...or take a photo")
+    source = up or cam
+
+    if source is None:
+        st.info("Waiting for an image.")
+    else:
+        try:
+            from src.vision import load_model, detect
+
+            model = load_model(weights)
+            img = Image.open(source).convert("RGB")
+            annotated, dets = detect(model, img, conf)
+
+            c1, c2 = st.columns(2)
+            c1.image(img, caption="Input", use_container_width=True)
+            c2.image(annotated, caption="YOLO detections", use_container_width=True)
+
+            if dets:
+                st.error(f"{len(dets)} detection(s) found, human review required.")
+                st.dataframe(dets, hide_index=True, use_container_width=True)
+            else:
+                st.success("Nothing detected above the threshold.")
+        except ImportError:
+            st.error("Missing package. Run: pip install ultralytics opencv-python-headless pillow")
+        except FileNotFoundError as e:
+            st.error(f"{e}. Check that the file is inside the models/ folder.")
+        except Exception as e:
+            st.error(f"Vision error: {e}")
 
 # ------------------------------ FOOTER ------------------------------
 st.divider()
