@@ -361,7 +361,7 @@ with k1:
     st.markdown(f"""
     <div class="ares-card">
         <div class="ares-card-label">Monitoring points</div>
-        <div class="ares-card-value">{total:02d}</div>
+        <<div class="ares-card-value">{total:02d}</div>
         <div class="ares-card-note">Industrial sensor locations</div>
     </div>
     """, unsafe_allow_html=True)
