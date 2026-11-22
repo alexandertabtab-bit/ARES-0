@@ -310,7 +310,8 @@ with st.sidebar:
 # DATA PROCESSING
 # ---------------------------------------------------------
 
-def get_factory_data(scenario="Normal operation"):
+df = get_factory_data(scenario)
+
 analysis = []
 
 for _, row in df.iterrows():
@@ -323,6 +324,7 @@ for _, row in df.iterrows():
         "risk_level": risk["level"],
         "risk_note": risk["label"]
     })
+
 
 results = df.join(pd.DataFrame(analysis))
 
