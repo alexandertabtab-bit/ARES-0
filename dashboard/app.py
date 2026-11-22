@@ -490,33 +490,25 @@ with status_col:
     st.markdown('<div class="ares-section">ARES unit network</div>',
                 unsafe_allow_html=True)
 
-    unit_data = [
-        ("UNIT A", "Rapid response",
-         "Drone response and visual assessment",
-         "CONCEPT / NOT CONNECTED", "#8298AF"),
-        ("UNIT B", "Hazard assessment",
-         "Gas monitoring and chemical context",
-         "CONCEPT / NOT CONNECTED", "#8298AF"),
-        ("UNIT C", "Industrial intelligence",
-         "Continuous sensor analysis",
-         "SIMULATION ACTIVE", "#29C78B"),
-        ("UNIT D", "Incident coordination",
-         "Shared incident and facility overview",
-         "PROTOTYPE", "#F2B84B")
-    ]
+    
+unit_data = [
+    ("UNIT A", "Rapid wildfire response",
+     "Aerial fire detection, thermal observation and perimeter assessment",
+     "CONCEPT / NOT CONNECTED", "#8298AF"),
 
-    for code, name, desc, status, color in unit_data:
-        st.markdown(f"""
-        <div class="ares-unit">
-            <div class="ares-unit-code">{code}</div>
-            <div class="ares-unit-name">{name}</div>
-            <div class="ares-unit-desc">{desc}</div>
-            <div class="ares-unit-status" style="color:{color}">
-                ● {status}
-            </div>
-        </div>
-        """, unsafe_allow_html=True)
-        st.write("")
+    ("UNIT B", "Advanced intervention",
+     "Specialized response for difficult wildfires and severe industrial incidents",
+     "CONCEPT / NOT CONNECTED", "#8298AF"),
+
+    ("UNIT C", "Industrial intelligence",
+     "Collects facility chemical and environmental data and communicates hazards to the command center",
+     "SIMULATION ACTIVE", "#29C78B"),
+
+    ("UNIT D", "Catastrophe response",
+     "Large-scale emergency assessment and support alongside firefighters",
+     "PROTOTYPE", "#F2B84B")
+]
+
 
 
 # ---------------------------------------------------------
