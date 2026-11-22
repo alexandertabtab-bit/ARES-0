@@ -312,17 +312,15 @@ with st.sidebar:
 
 def get_factory_data(scenario="Normal operation"):
     analysis = []
-
-for _, row in df.iterrows():
-    flags = analyze_readings(row.to_dict())
-    risk = calculate_risk(flags)
-
-    analysis.append({
-        **flags,
-        "risk_score": risk["score"],
-        "risk_level": risk["level"],
-        "risk_note": risk["label"]
-    })
+    for _, row in df.iterrows():
+        flags = analyze_readings(row.to_dict())
+        risk = calculate_risk(flags)
+        analysis.append({
+            **flags,
+            "risk_score": risk["score"],
+            "risk_level": risk["level"],
+            "risk_note": risk["label"]
+        })
 
 
 results = df.join(pd.DataFrame(analysis))
