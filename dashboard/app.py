@@ -10,7 +10,16 @@ import pandas as pd
 import streamlit as st
 import plotly.express as px
 
-from simulation.factory_data import get_factory_data
+import importlib.util
+
+factory_path = ROOT / "simulation" / "factory_data.py"
+factory_spec = importlib.util.spec_from_file_location(
+    "ares_factory_data", factory_path
+)
+factory_module = importlib.util.module_from_spec(factory_spec)
+factory_spec.loader.exec_module(factory_module)
+
+get_factory_data = factory_module.get_factory_data
 from src.sensor_analysis import analyze_readings
 from src.risk_engine import calculate_risk
 
