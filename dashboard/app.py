@@ -491,23 +491,60 @@ with status_col:
                 unsafe_allow_html=True)
 
     
-unit_data = [
-    ("UNIT A", "Rapid wildfire response",
-     "Aerial fire detection, thermal observation and perimeter assessment",
-     "CONCEPT / NOT CONNECTED", "#8298AF"),
 
-    ("UNIT B", "Advanced intervention",
-     "Specialized response for difficult wildfires and severe industrial incidents",
-     "CONCEPT / NOT CONNECTED", "#8298AF"),
+    unit_profiles = {
+        "UNIT A": {
+            "mission": "Rapid wildfire response",
+            "capabilities": "Fire detection, thermal observation, perimeter mapping",
+            "deployment": "Wildfire detection and initial aerial assessment"
+        },
+        "UNIT B": {
+            "mission": "Advanced intervention",
+            "capabilities": "Specialized aerial assessment and intervention support",
+            "deployment": "Difficult wildfires and severe industrial incidents"
+        },
+        "UNIT C": {
+            "mission": "Industrial intelligence",
+            "capabilities": "Chemical inventory, gas readings, environmental monitoring and facility hazard data",
+            "deployment": "Permanent or scheduled monitoring of high-risk industrial facilities"
+        },
+        "UNIT D": {
+            "mission": "Catastrophe response",
+            "capabilities": "Large-scale aerial assessment and incident support",
+            "deployment": "Major fires and catastrophes alongside firefighters"
+        }
+    }
 
-    ("UNIT C", "Industrial intelligence",
-     "Collects facility chemical and environmental data and communicates hazards to the command center",
-     "SIMULATION ACTIVE", "#29C78B"),
+    for code, name, desc, status, color in unit_data:
+        if st.button(f"Open {code} — {name}", key=f"profile_{code}"):
+            st.session_state["selected_unit"] = code
 
-    ("UNIT D", "Catastrophe response",
-     "Large-scale emergency assessment and support alongside firefighters",
-     "PROTOTYPE", "#F2B84B")
-]
+        st.markdown(f"""
+        <div class="ares-unit">
+            <div class="ares-unit-code">{code}</div>
+            <div class="ares-unit-name">{name}</div>
+            <div class="ares-unit-desc">{desc}</div>
+            <div class="ares-unit-status" style="color:{color}">
+                ● {status}
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+
+    selected_unit = st.session_state.get("selected_unit")
+
+    if selected_unit:
+        profile = unit_profiles[selected_unit]
+
+        st.markdown(f"""
+        <div class="ares-section">{selected_unit} OPERATIONAL PROFILE</div>
+        <div class="ares-unit">
+            <div class="ares-unit-name">{profile['mission']}</div>
+            <p><b>Capabilities:</b> {profile['capabilities']}</p>
+            <p><b>Deployment conditions:</b> {profile['deployment']}</p>
+            <p><b>Status:</b> Prototype / simulated data</p>
+        </div>
+        """, unsafe_allow_html=True)
+
 
 
 
