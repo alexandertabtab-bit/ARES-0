@@ -310,23 +310,27 @@ with st.sidebar:
 # DATA PROCESSING
 # ---------------------------------------------------------
 
-def get_factory_data(scenario="Normal operation"):
-    analysis = []
-    for _, row in df.iterrows():
-        flags = analyze_readings(row.to_dict())
-        risk = calculate_risk(flags)
-        analysis.append({
-            **flags,
-            "risk_score": risk["score"],
-            "risk_level": risk["level"],
-            "risk_note": risk["label"]
-        })
-        results = df.join(pd.DataFrame(analysis))
-        high_count = int((results["risk_level"] == "HIGH").sum())
-        medium_count = int((results["risk_level"] == "MEDIUM").sum())
-        low_count = int((results["risk_level"] == "LOW").sum())
-        total = len(results)
+df = get_factory_data(scenario)
 
+analysis = []
+
+for _, row in df.iterrows():
+    flags = analyze_readings(row.to_dict())
+    risk = calculate_risk(flags)
+
+    analysis.append({
+        **flags,
+        "risk_score": risk["score"],
+        "risk_level": risk["level"],
+        "risk_note": risk["label"]
+    })
+
+results = df.join(pd.DataFrame(analysis))
+
+high_count = int((results["risk_level"] == "HIGH").sum())
+medium_count = int((results["risk_level"] == "MEDIUM").sum())
+low_count = int((results["risk_level"] == "LOW").sum())
+total = len(results)
 
 # ---------------------------------------------------------
 # TOP BAR AND HERO
@@ -361,11 +365,7 @@ with k1:
     st.markdown(f"""
     <div class="ares-card">
         <div class="ares-card-label">Monitoring points</div>
-<<<<<<< HEAD
-        <<div class="ares-card-value">{len(results):02d}</div>
-=======
-        <div class="ares-card-value">{len(results):02d}</div>
->>>>>>> 7396fb6 (Fix monitoring points KPI)
+        <div class="ares-card-value">{total:02d}</div>
         <div class="ares-card-note">Industrial sensor locations</div>
     </div>
     """, unsafe_allow_html=True)
